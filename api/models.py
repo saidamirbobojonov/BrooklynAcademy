@@ -125,7 +125,6 @@ class StudentSolve(models.Model):
     # text typed by student for typed questions
     solve_typed = models.TextField(blank=True, null=True)
     solve_status = models.BooleanField(default=False)  # True = passed/correct
-
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -185,7 +184,7 @@ class Journal(models.Model):
         on_delete=models.CASCADE,
         related_name="journal_entries",
     )
-    status = models.CharField(max_length=50)  # e.g. "present", "absent"
+    status = models.BooleanField(default=False)  # e.g. "present", "absent"
     date = models.DateField()
 
     class Meta:
@@ -318,7 +317,6 @@ class Partner(models.Model):
     def __str__(self):
         return self.name
 
-
 class FAQ(models.Model):
     question = models.CharField(max_length=500)
     answer = models.TextField()
@@ -386,12 +384,12 @@ class SuccessStory(models.Model):
         related_name="success_stories",
     )
     description = models.TextField()
-    rate = forms.DecimalField(
-        max_value=5.0,
-        min_value=1.0,
+    rate = models.DecimalField(
+        max_digits=2,
         decimal_places=1,
-        widget=forms.NumberInput(attrs={'step': '0.1', 'min': '1.0', 'max': '5.0'})
-    )  # e.g. 1–5
+        default=5.0,
+        help_text="Rating from 1.0 to 5.0",
+    )
     published = models.BooleanField(default=False)
 
     def __str__(self):
